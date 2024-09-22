@@ -39,7 +39,7 @@ public class CustomerController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_CUSTOMER')")
     public ResponseEntity<?> getCustomersById(@PathVariable  String id) {
         CustomerResponse customerResponse = customerService.getCustomerById(id);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_ALL_CUSTOMER, HttpStatus.OK.value(), customerResponse);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_CUSTOMER, HttpStatus.OK.value(), customerResponse);
 
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
@@ -77,7 +77,7 @@ public class CustomerController {
     @DeleteMapping(PathApi.BY_ID)
     public ResponseEntity<?> deleteCustomer(@PathVariable String id) {
         CustomerResponse customerResponse =  this.customerService.deleteCustomerById(id);
-        BaseResponse<?> response = mapToBaseResponse("Successfully deleted customer", HttpStatus.OK.value(), customerResponse);
+        BaseResponse<?> response = mapToBaseResponse(Message.SUCCESS_DELETE_CUSTOMER, HttpStatus.OK.value(), customerResponse);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

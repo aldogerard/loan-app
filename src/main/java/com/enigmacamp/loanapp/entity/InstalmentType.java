@@ -18,5 +18,6 @@ import lombok.experimental.SuperBuilder;
 public class InstalmentType extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
+    @Column(unique = true)
     private EInstalmentType name;
 }

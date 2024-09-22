@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +53,13 @@ public class InstalmentTypeController {
     public ResponseEntity<?> updateInstalmentType(@RequestBody InstalmentTypeRequest instalmentTypeRequest) {
         InstalmentType instalmentType = instalmentTypeService.updateInstalmentType(instalmentTypeRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
+        return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
+    }
+
+    @DeleteMapping(PathApi.BY_ID)
+    public ResponseEntity<?> deleteInstalmentTypeById(@PathVariable String id) {
+        InstalmentType instalmentType = instalmentTypeService.deleteInstalmentType(id);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_DELETE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 

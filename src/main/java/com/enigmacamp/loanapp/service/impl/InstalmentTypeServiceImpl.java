@@ -1,6 +1,7 @@
 package com.enigmacamp.loanapp.service.impl;
 
 import com.enigmacamp.loanapp.constant.enums.EInstalmentType;
+import com.enigmacamp.loanapp.constant.strings.Message;
 import com.enigmacamp.loanapp.dto.request.InstalmentTypeRequest;
 import com.enigmacamp.loanapp.entity.InstalmentType;
 import com.enigmacamp.loanapp.repository.InstalmentTypeRepository;
@@ -30,7 +31,7 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
             instalmentTypeRepository.save(instalmentType);
             return instalmentType;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "InstalmentType is exist");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.IS_EXIST_INSTALMENT_TYPE);
         }
     }
 
@@ -55,23 +56,23 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
             findInstalmentType.setName(Enum.valueOf(EInstalmentType.class, instalmentTypeRequest.getInstalmentType()));
             findInstalmentType.setUpdatedAt(LocalDateTime.now());
 
-            instalmentTypeRepository.save(findInstalmentType);
-
+            instalmentTypeRepository.saveAndFlush(findInstalmentType);
             return findInstalmentType;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "InstalmentType is exist");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.IS_EXIST_INSTALMENT_TYPE);
         }
     }
 
     @Override
-    public void deleteInstalmentType(String id) {
+    public InstalmentType deleteInstalmentType(String id) {
         InstalmentType findInstalmentType = getByIdOrThrow(id);
         if (findInstalmentType == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         instalmentTypeRepository.delete(findInstalmentType);
+        return findInstalmentType;
     }
 
     private InstalmentType getByIdOrThrow(String id) {
         Optional<InstalmentType> instalmentType = instalmentTypeRepository.findById(id);
-        return instalmentType.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Instalment type not found"));
+        return instalmentType.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND_INSTALMENT_TYPE));
     }
 }

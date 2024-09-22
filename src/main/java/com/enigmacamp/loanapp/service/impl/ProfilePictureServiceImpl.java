@@ -1,5 +1,6 @@
 package com.enigmacamp.loanapp.service.impl;
 
+import com.enigmacamp.loanapp.constant.strings.Message;
 import com.enigmacamp.loanapp.entity.ProfilePicture;
 import com.enigmacamp.loanapp.repository.ProfilePictureRepository;
 import com.enigmacamp.loanapp.service.ProfilePictureService;
@@ -28,7 +29,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 
     @Override
     public ProfilePicture createProfilePicture(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No file uploaded");
+        if (multipartFile.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.NO_FILE_UPLOAD);
 
         try {
             String path = "/home/enigma/Documents/Enigma/Java/assets/images";

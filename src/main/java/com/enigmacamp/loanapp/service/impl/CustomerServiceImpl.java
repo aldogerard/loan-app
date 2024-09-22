@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             customerRepository.saveAndFlush(customer);
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Customer already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT,Message.IS_EXIST_CUSTOMER);
         }
     }
 
@@ -114,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Customer getByIdOrThrow(String id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        return customer.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+        return customer.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND_CUSTOMER));
     }
 
 }

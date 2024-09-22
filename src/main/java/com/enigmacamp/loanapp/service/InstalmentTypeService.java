@@ -12,5 +12,5 @@ public interface InstalmentTypeService {
     InstalmentType getInstalmentTypeById(String id);
     List<InstalmentType> getAllInstalmentTypes();
     InstalmentType updateInstalmentType(InstalmentTypeRequest instalmentTypeRequest);
-    void deleteInstalmentType(String id);
+    InstalmentType deleteInstalmentType(String id);
 }

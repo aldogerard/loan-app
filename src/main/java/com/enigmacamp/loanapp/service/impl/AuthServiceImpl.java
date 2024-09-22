@@ -1,6 +1,7 @@
 package com.enigmacamp.loanapp.service.impl;
 
 import com.enigmacamp.loanapp.constant.enums.ERole;
+import com.enigmacamp.loanapp.constant.strings.Message;
 import com.enigmacamp.loanapp.dto.request.AuthRequest;
 import com.enigmacamp.loanapp.dto.response.LoginResponse;
 import com.enigmacamp.loanapp.dto.response.RegisterResponse;
@@ -64,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
             this.customerService.createCustomer(customer);
             return this.getRegisterResponse(user);
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Customer already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST_CUSTOMER);
         }
     }
 
@@ -89,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
             return this.getRegisterResponse(user);
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Admin already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST_ADMIN);
         }
     }
 
