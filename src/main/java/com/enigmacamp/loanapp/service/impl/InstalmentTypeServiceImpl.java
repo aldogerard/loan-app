@@ -27,6 +27,7 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
             InstalmentType instalmentType = InstalmentType.builder()
                     .name(Enum.valueOf(EInstalmentType.class, instalmentTypeRequest.getInstalmentType()))
                     .createdAt(LocalDateTime.now())
+                    .createdBy(instalmentTypeRequest.getRole())
                     .build();
             instalmentTypeRepository.save(instalmentType);
             return instalmentType;

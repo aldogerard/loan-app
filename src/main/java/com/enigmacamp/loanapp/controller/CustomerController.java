@@ -6,11 +6,14 @@ import com.enigmacamp.loanapp.constant.strings.PathApi;
 import com.enigmacamp.loanapp.dto.request.CustomerRequest;
 import com.enigmacamp.loanapp.dto.response.CustomerResponse;
 import com.enigmacamp.loanapp.service.CustomerService;
+import com.enigmacamp.loanapp.utils.RoleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +59,8 @@ public class CustomerController {
             @RequestParam(defaultValue = "", required = false) String status,
             @RequestParam(required = false) MultipartFile image
     ) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         CustomerRequest customerRequest = CustomerRequest.builder()
                 .id(id)
                 .firstName(firstName)
@@ -64,6 +69,7 @@ public class CustomerController {
                 .dateOfBirth(dateOfBirth)
                 .phone(phone)
                 .status(status)
+                .role(RoleUtil.getName(auth))
                 .multipartFile(image)
                 .build();
 

@@ -62,39 +62,33 @@ public class CustomerServiceImpl implements CustomerService {
         String findPath = null;
         ProfilePicture profilePicture = null;
 
-        Customer customer = Customer.builder()
-                .id(customerRequest.getId())
-                .updatedAt(LocalDateTime.now())
-                .updatedBy(customerRequest.getEmail())
-                .firstName(customerRequest.getFirstName())
-                .lastName(customerRequest.getLastName())
-                .phone(customerRequest.getPhone())
-                .status(customerRequest.getStatus())
-                .user(findCustomer.getUser())
-                .build();
+        findCustomer.setUpdatedAt(LocalDateTime.now());
+        findCustomer.setUpdatedBy(customerRequest.getRole());
+        findCustomer.setFirstName(customerRequest.getFirstName());
+        findCustomer.setLastName(customerRequest.getLastName());
+        findCustomer.setPhone(customerRequest.getPhone());
+        findCustomer.setStatus(customerRequest.getStatus());
 
         if(customerRequest.getMultipartFile() != null){
             if (getByIdOrThrow(customerRequest.getId()).getProfilePicture() != null){
                 findPath = getByIdOrThrow(customerRequest.getId()).getProfilePicture().getPath();
             }
             profilePicture = profilePictureService.createProfilePicture(customerRequest.getMultipartFile());
-            customer.setProfilePicture(profilePicture);
+            findCustomer.setProfilePicture(profilePicture);
         }
 
         Date dateOfBirth = customerRequest.getDateOfBirth() != null ? customerRequest.getDateOfBirth() : null;
-
         if (dateOfBirth != null) {
-            customer.setDateOfBirth(dateOfBirth);
+            findCustomer.setDateOfBirth(dateOfBirth);
         }
 
-        customerRepository.saveAndFlush(customer);
+        customerRepository.saveAndFlush(findCustomer);
 
         if(customerRequest.getMultipartFile() != null && findPath != null) {
             profilePictureService.deleteProfilePictureByPath(findPath);
         }
 
-        return CustomerMapper.customerToCustomerResponse(customer);
-
+        return CustomerMapper.customerToCustomerResponse(findCustomer);
     }
 
     @Override

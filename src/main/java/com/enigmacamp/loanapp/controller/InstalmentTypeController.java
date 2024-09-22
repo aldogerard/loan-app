@@ -32,6 +32,9 @@ public class InstalmentTypeController {
 
     @PostMapping()
     public ResponseEntity<?> createInstalmentType(@RequestBody InstalmentTypeRequest instalmentTypeRequest) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        instalmentTypeRequest.setRole(RoleUtil.getName(auth));
+
         InstalmentType instalmentType = instalmentTypeService.createInstalmentType(instalmentTypeRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
