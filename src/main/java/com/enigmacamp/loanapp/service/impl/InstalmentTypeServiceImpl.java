@@ -55,11 +55,12 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
 
             findInstalmentType.setName(Enum.valueOf(EInstalmentType.class, instalmentTypeRequest.getInstalmentType()));
             findInstalmentType.setUpdatedAt(LocalDateTime.now());
+            findInstalmentType.setUpdatedBy(instalmentTypeRequest.getRole());
 
             instalmentTypeRepository.saveAndFlush(findInstalmentType);
             return findInstalmentType;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.IS_EXIST_INSTALMENT_TYPE);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
