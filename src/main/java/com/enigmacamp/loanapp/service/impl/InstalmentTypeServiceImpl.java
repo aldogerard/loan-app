@@ -32,7 +32,7 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
             instalmentTypeRepository.save(instalmentType);
             return instalmentType;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.IS_EXIST_INSTALMENT_TYPE);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.BAD_REQUEST_INSTALMENT_TYPE);
         }
     }
 

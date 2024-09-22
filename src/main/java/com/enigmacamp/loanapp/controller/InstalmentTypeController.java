@@ -72,5 +72,4 @@ public class InstalmentTypeController {
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_DELETE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
-
 }

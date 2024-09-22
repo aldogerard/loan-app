@@ -100,8 +100,6 @@ public class CustomerServiceImpl implements CustomerService {
             profilePictureService.deleteProfilePictureByPath(customer.getProfilePicture().getPath());
         }
 
-        System.out.println(customer);
-
         userService.deleteUserById(customer.getUser().getId());
         return CustomerMapper.customerToCustomerResponse(customer);
     }
