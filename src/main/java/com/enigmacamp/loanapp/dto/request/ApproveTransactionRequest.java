@@ -1,6 +1,5 @@
 package com.enigmacamp.loanapp.dto.request;
 
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class LoanTypeRequest {
-    private String id;
-    private String type;
-    @Positive
-    private Double maxLoan;
+public class ApproveTransactionRequest {
+    private String adminId;
+    private String loanTransactionId;
+    private String interestRates;
 }

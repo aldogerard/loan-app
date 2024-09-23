@@ -45,7 +45,9 @@ public class JwtUtil {
                     .withSubject(appUser.getId())
                     .withIssuer(this.appName)
                     .withExpiresAt(Instant.now().plusSeconds(jwtExpirationInSeconds))
+                    .withClaim("userId", appUser.getId())
                     .withClaim("role", roles)
+                    .withClaim("email", appUser.getEmail())
                     .withIssuedAt(Instant.now())
                     .sign(algorithm);
         } catch (JWTCreationException e){

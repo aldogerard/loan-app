@@ -10,6 +10,7 @@ import com.enigmacamp.loanapp.repository.CustomerRepository;
 import com.enigmacamp.loanapp.service.CustomerService;
 import com.enigmacamp.loanapp.service.ProfilePictureService;
 import com.enigmacamp.loanapp.service.UserService;
+import com.enigmacamp.loanapp.utils.CurrentUserUtil;
 import com.enigmacamp.loanapp.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,9 +37,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackFor = Exception.class)
     public void createCustomer(Customer customer) {
         try {
-            customerRepository.saveAndFlush(customer);
+            CurrentUserUtil.setEmail(customer.getUser().getEmail());
+            customerRepository.save(customer);
+            CurrentUserUtil.clear();
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,Message.IS_EXIST_CUSTOMER);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST_CUSTOMER);
         }
     }
 
@@ -56,14 +59,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer getById(String id) {
+        return getByIdOrThrow(id);
+    }
+
+    @Override
     public CustomerResponse updateCustomerById(CustomerRequest customerRequest) {
         validationUtil.validate(customerRequest);
         Customer findCustomer = getByIdOrThrow(customerRequest.getId());
         String findPath = null;
         ProfilePicture profilePicture = null;
 
-        findCustomer.setUpdatedAt(LocalDateTime.now());
-        findCustomer.setUpdatedBy(customerRequest.getRole());
         findCustomer.setFirstName(customerRequest.getFirstName());
         findCustomer.setLastName(customerRequest.getLastName());
         findCustomer.setPhone(customerRequest.getPhone());

@@ -59,8 +59,8 @@ public class AuthServiceImpl implements AuthService {
 
             Customer customer = Customer.builder()
                     .user(user)
-                    .createdAt(LocalDateTime.now())
                     .build();
+            System.out.println(customer);
 
             this.customerService.createCustomer(customer);
             return this.getRegisterResponse(user);

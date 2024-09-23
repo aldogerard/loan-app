@@ -6,14 +6,10 @@ import com.enigmacamp.loanapp.constant.strings.PathApi;
 import com.enigmacamp.loanapp.dto.request.InstalmentTypeRequest;
 import com.enigmacamp.loanapp.entity.InstalmentType;
 import com.enigmacamp.loanapp.service.InstalmentTypeService;
-import com.enigmacamp.loanapp.utils.RoleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -32,8 +28,6 @@ public class InstalmentTypeController {
 
     @PostMapping()
     public ResponseEntity<?> createInstalmentType(@RequestBody InstalmentTypeRequest instalmentTypeRequest) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        instalmentTypeRequest.setRole(RoleUtil.getName(auth));
 
         InstalmentType instalmentType = instalmentTypeService.createInstalmentType(instalmentTypeRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
@@ -58,8 +52,6 @@ public class InstalmentTypeController {
 
     @PutMapping()
     public ResponseEntity<?> updateInstalmentType(@RequestBody InstalmentTypeRequest instalmentTypeRequest) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        instalmentTypeRequest.setRole(RoleUtil.getName(auth));
 
         InstalmentType instalmentType = instalmentTypeService.updateInstalmentType(instalmentTypeRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);

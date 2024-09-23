@@ -7,13 +7,10 @@ import com.enigmacamp.loanapp.constant.strings.PathApi;
 import com.enigmacamp.loanapp.dto.request.LoanTypeRequest;
 import com.enigmacamp.loanapp.entity.LoanType;
 import com.enigmacamp.loanapp.service.LoanTypeService;
-import com.enigmacamp.loanapp.utils.RoleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +27,6 @@ public class loanTypeController {
 
     @PostMapping()
     public ResponseEntity<?> createInstalmentType(@RequestBody LoanTypeRequest loanTypeRequest) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        loanTypeRequest.setRole(RoleUtil.getName(auth));
 
         LoanType loanType = loanTypeService.createLoanType(loanTypeRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE_LOAN_TYPE, HttpStatus.OK.value(), loanType);
@@ -56,9 +51,6 @@ public class loanTypeController {
 
     @PutMapping()
     public ResponseEntity<?> updateInstalmentType(@RequestBody LoanTypeRequest loanTypeRequest) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        loanTypeRequest.setRole(RoleUtil.getName(auth));
-
         LoanType loanType = loanTypeService.updateLoanType(loanTypeRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE_LOAN_TYPE, HttpStatus.OK.value(), loanType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);

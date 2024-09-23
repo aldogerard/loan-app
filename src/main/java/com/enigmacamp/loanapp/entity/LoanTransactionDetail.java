@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +20,7 @@ import java.util.Date;
 @Table(name = PathDB.LOAN_TRANSACTION_DETAIL)
 public class LoanTransactionDetail extends BaseEntity {
     @Column(name = "transaction_date")
-    private Date transactionDate;
+    private LocalDateTime transactionDate;
 
     @Column
     private Double nominal;

@@ -27,8 +27,6 @@ public class LoanTypeServiceImpl implements LoanTypeService {
             LoanType loanType = LoanType.builder()
                     .type(loanTypeRequest.getType())
                     .maxLoan(loanTypeRequest.getMaxLoan())
-                    .createdAt(LocalDateTime.now())
-                    .createdBy(loanTypeRequest.getRole())
                     .build();
             loanTypeRepository.save(loanType);
             return loanType;
@@ -57,8 +55,6 @@ public class LoanTypeServiceImpl implements LoanTypeService {
 
             findLoanTypes.setType(loanTypeRequest.getType());
             findLoanTypes.setMaxLoan(loanTypeRequest.getMaxLoan());
-            findLoanTypes.setUpdatedAt(LocalDateTime.now());
-            findLoanTypes.setUpdatedBy(loanTypeRequest.getRole());
 
             loanTypeRepository.saveAndFlush(findLoanTypes);
             return findLoanTypes;

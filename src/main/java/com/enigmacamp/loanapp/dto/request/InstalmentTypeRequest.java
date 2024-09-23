@@ -12,5 +12,4 @@ import lombok.experimental.SuperBuilder;
 public class InstalmentTypeRequest {
     private String id;
     private String instalmentType;
-    private String role;
 }

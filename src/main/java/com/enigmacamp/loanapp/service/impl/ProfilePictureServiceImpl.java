@@ -40,12 +40,10 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
             Files.copy(multipartFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             ProfilePicture profilePicture = ProfilePicture.builder()
                     .name(filename)
-                    .createdAt(LocalDateTime.now())
                     .url("/api/menu/" + LocalDateTime.now() + "/image")
                     .size(multipartFile.getSize())
                     .contentType(multipartFile.getContentType())
                     .path(filePath.toString())
-                    .createdAt(LocalDateTime.now())
                     .build();
 
             profilePictureRepository.saveAndFlush(profilePicture);

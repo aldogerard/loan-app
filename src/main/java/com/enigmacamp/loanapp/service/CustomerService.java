@@ -12,6 +12,7 @@ public interface CustomerService {
     void createCustomer(Customer customer);
     List<CustomerResponse> getAllCustomer();
     CustomerResponse getCustomerById(String id);
+    Customer getById(String id);
     CustomerResponse updateCustomerById(CustomerRequest customerRequest);
     CustomerResponse deleteCustomerById(String id);
 }

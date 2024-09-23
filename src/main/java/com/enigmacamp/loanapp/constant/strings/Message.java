@@ -30,4 +30,8 @@ public class Message {
     public static final String NOT_FOUND_LOAN_TYPE = "Instalment type not found";
     public static final String BAD_REQUEST_LOAN_TYPE = "Instalment type does not match";
     public static final String IS_EXIST_LOAN_TYPE = "InstalmentType is exist";
+
+    public static final String SUCCESS_CREATE_LOAN_TRANSACTION = "Successfully created loan transaction";
+    public static final String SUCCESS_GET_LOAN_TRANSACTION = "Successfully get loan transaction";
+
 }

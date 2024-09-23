@@ -20,6 +20,5 @@ public class CustomerRequest {
     private String phone;
     private String status;
     private String email;
-    private String role;
     private MultipartFile multipartFile;
 }

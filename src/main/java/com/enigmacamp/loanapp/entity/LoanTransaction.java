@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -35,7 +36,7 @@ public class LoanTransaction extends BaseEntity {
     private Double nominal;
 
     @Column(name = "approved_at")
-    private Long approvedAt;
+    private LocalDateTime approvedAt;
 
     @Column(name = "approved_by")
     private String approvedBy;

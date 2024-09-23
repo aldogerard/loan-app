@@ -25,9 +25,7 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
     public InstalmentType createInstalmentType(InstalmentTypeRequest instalmentTypeRequest) {
         try {
             InstalmentType instalmentType = InstalmentType.builder()
-                    .name(Enum.valueOf(EInstalmentType.class, instalmentTypeRequest.getInstalmentType()))
-                    .createdAt(LocalDateTime.now())
-                    .createdBy(instalmentTypeRequest.getRole())
+                    .name(Enum.valueOf(EInstalmentType.class, instalmentTypeRequest.getInstalmentType().toUpperCase()))
                     .build();
             instalmentTypeRepository.save(instalmentType);
             return instalmentType;
@@ -55,8 +53,6 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
             if (findInstalmentType == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
             findInstalmentType.setName(Enum.valueOf(EInstalmentType.class, instalmentTypeRequest.getInstalmentType()));
-            findInstalmentType.setUpdatedAt(LocalDateTime.now());
-            findInstalmentType.setUpdatedBy(instalmentTypeRequest.getRole());
 
             instalmentTypeRepository.saveAndFlush(findInstalmentType);
             return findInstalmentType;
