@@ -26,7 +26,7 @@ public class LoanTransactionController {
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<?> createLoanTransaction(@RequestBody LoanTransactionRequest loanTransactionRequest) {
         LoanTransactionResponse loanTransactionResponse = loanTransactionService.createLoanTransaction(loanTransactionRequest);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE_LOAN_TRANSACTION, HttpStatus.CREATED.value(), loanTransactionResponse);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE, HttpStatus.CREATED.value(), loanTransactionResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
     }
 
@@ -35,7 +35,7 @@ public class LoanTransactionController {
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<?> getLoanTransactionById(@PathVariable String id) {
         LoanTransactionResponse loanTransactionResponse = loanTransactionService.getLoanTransactionById(id);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_LOAN_TRANSACTION, HttpStatus.OK.value(), loanTransactionResponse);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET, HttpStatus.OK.value(), loanTransactionResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
     }
 

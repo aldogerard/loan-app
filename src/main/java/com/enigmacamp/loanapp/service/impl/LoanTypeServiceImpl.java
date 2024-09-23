@@ -31,7 +31,7 @@ public class LoanTypeServiceImpl implements LoanTypeService {
             loanTypeRepository.save(loanType);
             return loanType;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.BAD_REQUEST_INSTALMENT_TYPE);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.BAD_REQUEST);
         }
     }
 
@@ -73,6 +73,6 @@ public class LoanTypeServiceImpl implements LoanTypeService {
 
     private LoanType getByIdOrThrow(String id) {
         Optional<LoanType> loanType = loanTypeRepository.findById(id);
-        return loanType.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND_LOAN_TYPE));
+        return loanType.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND));
     }
 }

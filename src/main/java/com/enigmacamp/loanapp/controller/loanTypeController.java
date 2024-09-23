@@ -29,14 +29,14 @@ public class loanTypeController {
     public ResponseEntity<?> createInstalmentType(@RequestBody LoanTypeRequest loanTypeRequest) {
 
         LoanType loanType = loanTypeService.createLoanType(loanTypeRequest);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE_LOAN_TYPE, HttpStatus.OK.value(), loanType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE, HttpStatus.OK.value(), loanType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllInstalmentType() {
         List<LoanType> loanTypeList = loanTypeService.getAllLoanTypes();
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_ALL_LOAN_TYPE, HttpStatus.OK.value(), loanTypeList);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_ALL, HttpStatus.OK.value(), loanTypeList);
 
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
@@ -44,7 +44,7 @@ public class loanTypeController {
     @GetMapping(PathApi.BY_ID)
     public ResponseEntity<?> getInstalmentTypeById(@PathVariable String id) {
         LoanType instalmentType = loanTypeService.getLoanTypeById(id);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_LOAN_TYPE, HttpStatus.OK.value(), instalmentType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET, HttpStatus.OK.value(), instalmentType);
 
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
@@ -52,14 +52,14 @@ public class loanTypeController {
     @PutMapping()
     public ResponseEntity<?> updateInstalmentType(@RequestBody LoanTypeRequest loanTypeRequest) {
         LoanType loanType = loanTypeService.updateLoanType(loanTypeRequest);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE_LOAN_TYPE, HttpStatus.OK.value(), loanType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE, HttpStatus.OK.value(), loanType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 
     @DeleteMapping(PathApi.BY_ID)
     public ResponseEntity<?> deleteInstalmentTypeById(@PathVariable String id) {
         LoanType loanType = loanTypeService.deleteLoanType(id);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_DELETE_INSTALMENT_TYPE, HttpStatus.OK.value(), loanType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_DELETE, HttpStatus.OK.value(), loanType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 }

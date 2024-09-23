@@ -1,10 +1,7 @@
 package com.enigmacamp.loanapp.service.impl;
 
-import com.enigmacamp.loanapp.constant.enums.EApprovalStatus;
-import com.enigmacamp.loanapp.constant.strings.Message;
 import com.enigmacamp.loanapp.dto.request.ApproveTransactionRequest;
 import com.enigmacamp.loanapp.dto.request.LoanTransactionRequest;
-import com.enigmacamp.loanapp.dto.response.CustomerResponse;
 import com.enigmacamp.loanapp.dto.response.LoanTransactionDetailResponse;
 import com.enigmacamp.loanapp.dto.response.LoanTransactionResponse;
 import com.enigmacamp.loanapp.entity.*;

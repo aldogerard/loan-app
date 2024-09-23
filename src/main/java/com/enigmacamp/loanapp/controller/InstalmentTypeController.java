@@ -30,14 +30,14 @@ public class InstalmentTypeController {
     public ResponseEntity<?> createInstalmentType(@RequestBody InstalmentTypeRequest instalmentTypeRequest) {
 
         InstalmentType instalmentType = instalmentTypeService.createInstalmentType(instalmentTypeRequest);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_CREATE, HttpStatus.OK.value(), instalmentType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllInstalmentType() {
         List<InstalmentType> instalmentTypeList = instalmentTypeService.getAllInstalmentTypes();
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_ALL_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentTypeList);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_ALL, HttpStatus.OK.value(), instalmentTypeList);
 
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
@@ -45,7 +45,7 @@ public class InstalmentTypeController {
     @GetMapping(PathApi.BY_ID)
     public ResponseEntity<?> getInstalmentTypeById(@PathVariable String id) {
         InstalmentType instalmentType = instalmentTypeService.getInstalmentTypeById(id);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET, HttpStatus.OK.value(), instalmentType);
 
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
@@ -54,14 +54,14 @@ public class InstalmentTypeController {
     public ResponseEntity<?> updateInstalmentType(@RequestBody InstalmentTypeRequest instalmentTypeRequest) {
 
         InstalmentType instalmentType = instalmentTypeService.updateInstalmentType(instalmentTypeRequest);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE, HttpStatus.OK.value(), instalmentType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 
     @DeleteMapping(PathApi.BY_ID)
     public ResponseEntity<?> deleteInstalmentTypeById(@PathVariable String id) {
         InstalmentType instalmentType = instalmentTypeService.deleteInstalmentType(id);
-        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_DELETE_INSTALMENT_TYPE, HttpStatus.OK.value(), instalmentType);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_DELETE, HttpStatus.OK.value(), instalmentType);
         return ResponseEntity.status(HttpStatus.OK).body(baseResponse);
     }
 }

@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
             this.customerService.createCustomer(customer);
             return this.getRegisterResponse(user);
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST_CUSTOMER);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST);
         }
     }
 
@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
             return this.getRegisterResponse(user);
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST_ADMIN);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, Message.IS_EXIST);
         }
     }
 

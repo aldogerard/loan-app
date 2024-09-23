@@ -30,7 +30,7 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
             instalmentTypeRepository.save(instalmentType);
             return instalmentType;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.BAD_REQUEST_INSTALMENT_TYPE);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.BAD_REQUEST);
         }
     }
 
@@ -71,6 +71,6 @@ public class InstalmentTypeServiceImpl implements InstalmentTypeService {
 
     private InstalmentType getByIdOrThrow(String id) {
         Optional<InstalmentType> instalmentType = instalmentTypeRepository.findById(id);
-        return instalmentType.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND_INSTALMENT_TYPE));
+        return instalmentType.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND));
     }
 }
