@@ -38,14 +38,14 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             customerRepository.saveAndFlush(customer);
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,Message.IS_EXIST_CUSTOMER);
+            throw new ResponseStatusException(HttpStatus.CONFLICT,Message.IS_EXIST);
         }
     }
 
     @Override
     public List<CustomerResponse> getAllCustomer() {
         List<Customer> customerList = customerRepository.findAll();
-        if (customerList.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND_CUSTOMER);
+        if (customerList.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND);
         return customerList.stream().map(CustomerMapper::customerToCustomerResponse).toList();
     }
 
@@ -56,14 +56,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer getById(String id) {
+        return getByIdOrThrow(id);
+    }
+
+    @Override
     public CustomerResponse updateCustomerById(CustomerRequest customerRequest) {
         validationUtil.validate(customerRequest);
         Customer findCustomer = getByIdOrThrow(customerRequest.getId());
         String findPath = null;
         ProfilePicture profilePicture = null;
 
-        findCustomer.setUpdatedAt(LocalDateTime.now());
-        findCustomer.setUpdatedBy(customerRequest.getRole());
         findCustomer.setFirstName(customerRequest.getFirstName());
         findCustomer.setLastName(customerRequest.getLastName());
         findCustomer.setPhone(customerRequest.getPhone());
@@ -106,7 +109,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Customer getByIdOrThrow(String id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        return customer.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND_CUSTOMER));
+        return customer.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Message.NOT_FOUND));
     }
 
 }

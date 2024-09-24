@@ -3,6 +3,7 @@ package com.enigmacamp.loanapp.controller;
 import com.enigmacamp.loanapp.base.BaseResponse;
 import com.enigmacamp.loanapp.constant.strings.Message;
 import com.enigmacamp.loanapp.constant.strings.PathApi;
+import com.enigmacamp.loanapp.dto.request.ApproveTransactionRequest;
 import com.enigmacamp.loanapp.dto.request.LoanTransactionRequest;
 import com.enigmacamp.loanapp.dto.response.LoanTransactionResponse;
 import com.enigmacamp.loanapp.service.LoanTransactionService;
@@ -31,7 +32,7 @@ public class LoanTransactionController {
     }
 
     @GetMapping(PathApi.BY_ID)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<?> getLoanTransactionById(@PathVariable String id) {
         LoanTransactionResponse loanTransactionResponse = loanTransactionService.getLoanTransactionById(id);
@@ -39,4 +40,23 @@ public class LoanTransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
     }
 
+    @PutMapping(PathApi.BY_ID + "/approve")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ResponseEntity<?> approveLoanTransaction(@PathVariable String id, @RequestBody ApproveTransactionRequest approveTransactionRequest) {
+        approveTransactionRequest.setAdminId(id);
+        System.out.println(approveTransactionRequest);
+        LoanTransactionResponse loanTransactionResponse = loanTransactionService.approveLoanTransaction(approveTransactionRequest);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET, HttpStatus.OK.value(), loanTransactionResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
+    }
+
+    @PutMapping(PathApi.BY_ID + "/pay")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ResponseEntity<?> payLoanTransaction(@PathVariable String id) {
+        LoanTransactionResponse loanTransactionResponse = loanTransactionService.payLoanTransaction(id);
+        BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET, HttpStatus.OK.value(), loanTransactionResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
+    }
 }

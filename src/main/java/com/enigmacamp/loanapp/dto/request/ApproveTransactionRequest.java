@@ -12,5 +12,5 @@ import lombok.experimental.SuperBuilder;
 public class ApproveTransactionRequest {
     private String adminId;
     private String loanTransactionId;
-    private String interestRates;
+    private Integer interestRates;
 }

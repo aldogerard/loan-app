@@ -30,6 +30,7 @@ public class LoanTransactionDetail extends BaseEntity {
     @JoinColumn(name = "loan_transaction_id")
     private LoanTransaction loanTransaction;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "loan_status")
     private ELoanStatus loanStatus;
 }

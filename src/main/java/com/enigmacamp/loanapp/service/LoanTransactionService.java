@@ -9,5 +9,6 @@ import org.springframework.stereotype.Service;
 public interface LoanTransactionService {
     LoanTransactionResponse createLoanTransaction(LoanTransactionRequest loanTransactionRequest);
     LoanTransactionResponse approveLoanTransaction(ApproveTransactionRequest approveTransactionRequest);
+    LoanTransactionResponse payLoanTransaction(String id);
     LoanTransactionResponse getLoanTransactionById(String id);
 }
