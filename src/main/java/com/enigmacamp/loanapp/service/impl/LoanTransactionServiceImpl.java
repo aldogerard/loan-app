@@ -77,14 +77,11 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
             AppUser user = userService.loadUserByUserId(approveTransactionRequest.getAdminId());
             LoanTransaction loanTransaction = getByIdOrThrow(approveTransactionRequest.getLoanTransactionId());
 
-            Map<EInstalmentType, Integer> monthMap = Map.of(
-                    EInstalmentType.ONE_MONTH, 1,
-                    EInstalmentType.THREE_MONTHS, 2,
-                    EInstalmentType.SIXTH_MONTHS, 3,
-                    EInstalmentType.NINE_MONTHS, 9,
-                    EInstalmentType.TWELVE_MONTHS, 12
-            );
-            Integer month = monthMap.get(loanTransaction.getInstalmentType().getName());
+            if (loanTransaction.getApprovalStatus() == EApprovalStatus.APPROVED){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan transaction is already approved.");
+            }
+
+            int month = loanTransaction.getInstalmentType().getName().getValue();
 
             loanTransaction.setApprovedBy(user.getEmail());
             loanTransaction.setApprovedAt(LocalDateTime.now());
@@ -92,12 +89,12 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
 
             loanTransactionRepository.saveAndFlush(loanTransaction);
 
-            double totalInterestRate = ((double) loanTransaction.getNominal() * month / 100);
+            double totalInterestRate = (loanTransaction.getNominal() * month / 100);
             double finalPayment = loanTransaction.getNominal() + totalInterestRate;
 
             List<LoanTransactionDetail> loanTransactionDetails = new ArrayList<>();
             for (int i = 0; i < month; i++) {
-                double nominalPerMonth = (double) finalPayment / month;
+                double nominalPerMonth = finalPayment / month;
                 LoanTransactionDetail loanTransactionDetail = LoanTransactionDetail.builder()
                         .loanTransaction(loanTransaction)
                         .loanStatus(ELoanStatus.UNPAID)
@@ -140,15 +137,26 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public LoanTransactionResponse payLoanTransaction(String id) {
         try {
             LoanTransaction loanTransaction = getByIdOrThrow(id);
             List<LoanTransactionDetail> loanTransactionDetails = loanTransactionDetailService.getLoanTransactionDetail(id);
-            AtomicInteger iterator = new AtomicInteger(1);
-            loanTransactionDetails.stream()
-                    .filter(loanTransactionDetail -> loanTransactionDetail.getLoanStatus().equals(ELoanStatus.UNPAID))
-                    .filter(loanTransactionDetail -> iterator.getAndDecrement() > 0)
-                    .forEach(loanTransactionDetail -> loanTransactionDetail.setLoanStatus(ELoanStatus.PAID));
+
+            boolean isPaid = false;
+
+            for (LoanTransactionDetail loanTransactionDetail : loanTransactionDetails) {
+                if (loanTransactionDetail.getLoanStatus().equals(ELoanStatus.UNPAID)) {
+                    loanTransactionDetail.setLoanStatus(ELoanStatus.PAID);
+                    loanTransactionDetail.setTransactionDate(LocalDateTime.now());
+                    isPaid = true;
+                    break;
+                }
+            }
+
+            if (!isPaid) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No installments to be paid");
+            }
 
             // UPDATE LOAN TRANSACTION DETAIL
             loanTransactionDetailService.updateLoanTransactionDetails(loanTransactionDetails);

@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Objects;
+
 @RestControllerAdvice
 public class ErrorController {
 
     @ExceptionHandler({ResponseStatusException.class})
     public ResponseEntity<?> responseStatusException(ResponseStatusException e) {
+        String reason = Objects.requireNonNull(e.getReason()).split(" \"")[1];
         BaseResponse<?> response = BaseResponse.builder()
                 .statusCode(e.getStatusCode().value())
-                .message(e.getReason())
+                .message(reason.substring(0, reason.length() - 1))
                 .build();
 
         return ResponseEntity
