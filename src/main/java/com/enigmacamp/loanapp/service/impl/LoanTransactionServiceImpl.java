@@ -1,7 +1,6 @@
 package com.enigmacamp.loanapp.service.impl;
 
 import com.enigmacamp.loanapp.constant.enums.EApprovalStatus;
-import com.enigmacamp.loanapp.constant.enums.EInstalmentType;
 import com.enigmacamp.loanapp.constant.enums.ELoanStatus;
 import com.enigmacamp.loanapp.dto.request.ApproveTransactionRequest;
 import com.enigmacamp.loanapp.dto.request.LoanTransactionRequest;
@@ -20,9 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,31 +103,7 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
 
             loanTransaction.setLoanTransactionDetails(loanTransactionDetails);
 
-            List<LoanTransactionDetailResponse> loanTransactionDetailResponse = loanTransaction.getLoanTransactionDetails().stream()
-                    .map(loanTransactionDetail -> LoanTransactionDetailResponse.builder()
-                            .transactionId(loanTransactionDetail.getId())
-                            .nominal(loanTransactionDetail.getNominal())
-                            .loanStatus(loanTransactionDetail.getLoanStatus().name())
-                            .transactionDate(loanTransactionDetail.getTransactionDate() != null ? loanTransactionDetail.getTransactionDate().toInstant(ZoneOffset.UTC).toEpochMilli() : null)
-                            .createdAt(loanTransactionDetail.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                            .updatedAt(loanTransactionDetail.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                            .build())
-                    .collect(Collectors.toList());
-
-
-            return LoanTransactionResponse.builder()
-                    .id(loanTransaction.getId())
-                    .loanTypeId(loanTransaction.getLoanType().getId())
-                    .instalmentTypeId(loanTransaction.getInstalmentType().getId())
-                    .customerId(loanTransaction.getCustomer().getId())
-                    .nominal(loanTransaction.getNominal())
-                    .approvedAt(loanTransaction.getApprovedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                    .approvedBy(loanTransaction.getApprovedBy())
-                    .approvalStatus(loanTransaction.getApprovalStatus().name())
-                    .transactionDetail(loanTransactionDetailResponse)
-                    .createdAt(loanTransaction.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                    .updatedAt(loanTransaction.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                    .build();
+            return loanTransactionToLoanTransactionResponse(loanTransaction);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -164,33 +137,37 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
             loanTransaction.setLoanTransactionDetails(loanTransactionDetails);
             loanTransactionRepository.saveAndFlush(loanTransaction);
 
-            List<LoanTransactionDetailResponse> loanTransactionDetailResponse = loanTransaction.getLoanTransactionDetails().stream()
-                    .map(loanTransactionDetail -> LoanTransactionDetailResponse.builder()
-                            .transactionId(loanTransactionDetail.getId())
-                            .nominal(loanTransactionDetail.getNominal())
-                            .loanStatus(loanTransactionDetail.getLoanStatus().name())
-                            .transactionDate(loanTransactionDetail.getTransactionDate() != null ? loanTransactionDetail.getTransactionDate().toInstant(ZoneOffset.UTC).toEpochMilli() : null)
-                            .createdAt(loanTransactionDetail.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                            .updatedAt(loanTransactionDetail.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                            .build())
-                    .collect(Collectors.toList());
-
-            return LoanTransactionResponse.builder()
-                    .id(loanTransaction.getId())
-                    .loanTypeId(loanTransaction.getLoanType().getId())
-                    .instalmentTypeId(loanTransaction.getInstalmentType().getId())
-                    .customerId(loanTransaction.getCustomer().getId())
-                    .nominal(loanTransaction.getNominal())
-                    .approvedAt(loanTransaction.getApprovedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                    .approvedBy(loanTransaction.getApprovedBy())
-                    .approvalStatus(loanTransaction.getApprovalStatus().name())
-                    .transactionDetail(loanTransactionDetailResponse)
-                    .createdAt(loanTransaction.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                    .updatedAt(loanTransaction.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
-                    .build();
+            return loanTransactionToLoanTransactionResponse(loanTransaction);
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    private LoanTransactionResponse loanTransactionToLoanTransactionResponse(LoanTransaction loanTransaction) {
+        List<LoanTransactionDetailResponse> loanTransactionDetailResponse = loanTransaction.getLoanTransactionDetails().stream()
+                .map(loanTransactionDetail -> LoanTransactionDetailResponse.builder()
+                        .transactionId(loanTransactionDetail.getId())
+                        .nominal(loanTransactionDetail.getNominal())
+                        .loanStatus(loanTransactionDetail.getLoanStatus().name())
+                        .transactionDate(loanTransactionDetail.getTransactionDate() != null ? loanTransactionDetail.getTransactionDate().toInstant(ZoneOffset.UTC).toEpochMilli() : null)
+                        .createdAt(loanTransactionDetail.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
+                        .updatedAt(loanTransactionDetail.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
+                        .build())
+                .collect(Collectors.toList());
+
+        return LoanTransactionResponse.builder()
+                .id(loanTransaction.getId())
+                .loanTypeId(loanTransaction.getLoanType().getId())
+                .instalmentTypeId(loanTransaction.getInstalmentType().getId())
+                .customerId(loanTransaction.getCustomer().getId())
+                .nominal(loanTransaction.getNominal())
+                .approvedAt(loanTransaction.getApprovedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
+                .approvedBy(loanTransaction.getApprovedBy())
+                .approvalStatus(loanTransaction.getApprovalStatus().name())
+                .transactionDetail(loanTransactionDetailResponse)
+                .createdAt(loanTransaction.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
+                .updatedAt(loanTransaction.getUpdatedAt().toInstant(ZoneOffset.UTC).toEpochMilli())
+                .build();
     }
 
     @Override
@@ -211,6 +188,7 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
             ).collect(Collectors.toUnmodifiableList());
         }
 
+        assert loanTransaction != null;
         LoanTransactionResponse loanTransactionResponse = LoanTransactionResponse.builder()
                .id(loanTransaction.getId())
                .loanTypeId(loanTransaction.getLoanType().getId())
