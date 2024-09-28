@@ -32,10 +32,10 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
         if (multipartFile.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.NO_FILE_UPLOAD);
 
         try {
-            String path = "/home/enigma/Documents/Enigma/Java/assets/images";
+            String path = "/loan_app/assets/images";
             Path directoryPath = Paths.get(path);
             Files.createDirectories(directoryPath);
-            String filename = String.format("%d, %s", System.currentTimeMillis(), multipartFile.getOriginalFilename());
+            String filename = String.format("%d_%s", System.currentTimeMillis(), multipartFile.getOriginalFilename());
             Path filePath = directoryPath.resolve(filename);
             Files.copy(multipartFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             ProfilePicture profilePicture = ProfilePicture.builder()

@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,50 +61,58 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CustomerResponse updateCustomerById(CustomerRequest customerRequest) {
-        validationUtil.validate(customerRequest);
-        Customer findCustomer = getByIdOrThrow(customerRequest.getId());
-        String findPath = null;
-        ProfilePicture profilePicture = null;
+        try {
+            validationUtil.validate(customerRequest);
 
-        findCustomer.setFirstName(customerRequest.getFirstName());
-        findCustomer.setLastName(customerRequest.getLastName());
-        findCustomer.setPhone(customerRequest.getPhone());
-        findCustomer.setStatus(customerRequest.getStatus());
+            Customer findCustomer = getByIdOrThrow(customerRequest.getId());
+            findCustomer.setFirstName(customerRequest.getFirstName());
+            findCustomer.setLastName(customerRequest.getLastName());
+            findCustomer.setPhone(customerRequest.getPhone());
+            findCustomer.setStatus(customerRequest.getStatus());
 
-        if(customerRequest.getMultipartFile() != null){
-            if (getByIdOrThrow(customerRequest.getId()).getProfilePicture() != null){
-                findPath = getByIdOrThrow(customerRequest.getId()).getProfilePicture().getPath();
+            if (customerRequest.getDateOfBirth() != null) {
+                LocalDate date = LocalDate.parse(customerRequest.getDateOfBirth(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                findCustomer.setDateOfBirth(date);
             }
-            profilePicture = profilePictureService.createProfilePicture(customerRequest.getMultipartFile());
-            findCustomer.setProfilePicture(profilePicture);
+            String findPath = null;
+            if(customerRequest.getMultipartFile() != null){
+                if (findCustomer.getProfilePicture() != null){
+                    findPath = findCustomer.getProfilePicture().getPath();
+                }
+                ProfilePicture profilePicture = profilePictureService.createProfilePicture(customerRequest.getMultipartFile());
+                findCustomer.setProfilePicture(profilePicture);
+            }
+
+            customerRepository.saveAndFlush(findCustomer);
+
+            if(customerRequest.getMultipartFile() != null && findPath != null){
+                profilePictureService.deleteProfilePictureByPath(findPath);
+            }
+
+            return CustomerMapper.customerToCustomerResponse(findCustomer);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-
-        Date dateOfBirth = customerRequest.getDateOfBirth() != null ? customerRequest.getDateOfBirth() : null;
-        if (dateOfBirth != null) {
-            findCustomer.setDateOfBirth(dateOfBirth);
-        }
-
-        customerRepository.saveAndFlush(findCustomer);
-
-        if(customerRequest.getMultipartFile() != null && findPath != null) {
-            profilePictureService.deleteProfilePictureByPath(findPath);
-        }
-
-        return CustomerMapper.customerToCustomerResponse(findCustomer);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CustomerResponse deleteCustomerById(String id) {
-        Customer customer = getByIdOrThrow(id);
-        customerRepository.deleteById(id);
+        try {
+            Customer customer = getByIdOrThrow(id);
+            customerRepository.deleteById(id);
 
-        if(customer.getProfilePicture() != null){
-            profilePictureService.deleteProfilePictureByPath(customer.getProfilePicture().getPath());
+            if(customer.getProfilePicture() != null){
+                profilePictureService.deleteProfilePictureByPath(customer.getProfilePicture().getPath());
+            }
+
+            userService.deleteUserById(customer.getUser().getId());
+            return CustomerMapper.customerToCustomerResponse(customer);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        userService.deleteUserById(customer.getUser().getId());
-        return CustomerMapper.customerToCustomerResponse(customer);
     }
 
     private Customer getByIdOrThrow(String id) {

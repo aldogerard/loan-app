@@ -14,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 import static com.enigmacamp.loanapp.mapper.BaseMapper.mapToBaseResponse;
@@ -48,12 +47,12 @@ public class CustomerController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_CUSTOMER')")
     public ResponseEntity<?> updateCustomerById(
             @RequestParam String id,
-            @RequestParam(defaultValue = "", required = false) String firstName,
-            @RequestParam(defaultValue = "", required = false) String lastName,
-            @RequestParam(defaultValue = "", required = false) String email,
-            @RequestParam(required = false) Date dateOfBirth,
-            @RequestParam(defaultValue = "", required = false) String phone,
-            @RequestParam(defaultValue = "", required = false) String status,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String dateOfBirth,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String status,
             @RequestParam(required = false) MultipartFile image
     ) {
 
@@ -62,11 +61,12 @@ public class CustomerController {
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
-                .dateOfBirth(dateOfBirth)
                 .phone(phone)
                 .status(status)
-                .multipartFile(image)
                 .build();
+
+        if (image != null) customerRequest.setMultipartFile(image);
+        if (dateOfBirth != null) customerRequest.setDateOfBirth(dateOfBirth);
 
         CustomerResponse customerResponse = customerService.updateCustomerById(customerRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_UPDATE, HttpStatus.OK.value(), customerResponse);

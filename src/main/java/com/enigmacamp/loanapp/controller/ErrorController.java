@@ -15,10 +15,17 @@ public class ErrorController {
 
     @ExceptionHandler({ResponseStatusException.class})
     public ResponseEntity<?> responseStatusException(ResponseStatusException e) {
-        String reason = Objects.requireNonNull(e.getReason()).split(" \"")[1];
+        String reason = e.getReason();
+        try {
+            reason = Objects.requireNonNull(e.getReason()).split(" \"")[1];
+            reason = reason.substring(0, reason.length() - 1);
+        } catch (Exception ignored) {
+
+        }
+
         BaseResponse<?> response = BaseResponse.builder()
                 .statusCode(e.getStatusCode().value())
-                .message(reason.substring(0, reason.length() - 1))
+                .message(reason)
                 .build();
 
         return ResponseEntity
