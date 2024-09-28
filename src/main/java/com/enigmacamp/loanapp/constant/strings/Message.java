@@ -12,4 +12,7 @@ public class Message {
     public static final String NO_FILE_UPLOAD = "No file uploaded";
     public static final String BAD_REQUEST = "Data does not match";
 
+    public static final String LOAN_NOMINAL_TOO_LARGE = "Loan nominal too large";
+    public static final String LOAN_ALREADY_APPROVED = "Loan transaction is already approved";
+    public static final String NO_INSTALMENT_PAID = "No installments to be paid";
 }

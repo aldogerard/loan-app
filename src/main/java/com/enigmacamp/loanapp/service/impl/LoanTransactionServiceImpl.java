@@ -2,6 +2,7 @@ package com.enigmacamp.loanapp.service.impl;
 
 import com.enigmacamp.loanapp.constant.enums.EApprovalStatus;
 import com.enigmacamp.loanapp.constant.enums.ELoanStatus;
+import com.enigmacamp.loanapp.constant.strings.Message;
 import com.enigmacamp.loanapp.dto.request.ApproveTransactionRequest;
 import com.enigmacamp.loanapp.dto.request.LoanTransactionRequest;
 import com.enigmacamp.loanapp.dto.response.LoanTransactionDetailResponse;
@@ -42,7 +43,7 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
             LoanType loanType = loanTypeService.getLoanTypeById(loanTransactionRequest.getLoanId());
 
             if (loanType.getMaxLoan() < loanTransactionRequest.getNominal()){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan type is too large.");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.LOAN_NOMINAL_TOO_LARGE);
             }
 
             LoanTransaction loanTransaction = LoanTransaction.builder()
@@ -75,7 +76,7 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
             LoanTransaction loanTransaction = getByIdOrThrow(approveTransactionRequest.getLoanTransactionId());
 
             if (loanTransaction.getApprovalStatus() == EApprovalStatus.APPROVED){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loan transaction is already approved.");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.LOAN_ALREADY_APPROVED);
             }
 
             int month = loanTransaction.getInstalmentType().getName().getValue();
@@ -128,7 +129,7 @@ public class LoanTransactionServiceImpl implements LoanTransactionService {
             }
 
             if (!isPaid) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No installments to be paid");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Message.NO_INSTALMENT_PAID);
             }
 
             // UPDATE LOAN TRANSACTION DETAIL
