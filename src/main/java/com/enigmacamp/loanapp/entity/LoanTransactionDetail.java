@@ -3,7 +3,8 @@ package com.enigmacamp.loanapp.entity;
 import com.enigmacamp.loanapp.base.BaseEntity;
 import com.enigmacamp.loanapp.constant.enums.ELoanStatus;
 import com.enigmacamp.loanapp.constant.strings.PathDB;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,8 @@ public class LoanTransactionDetail extends BaseEntity {
     private Double nominal;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonView
+    @JsonIgnore
     @JoinColumn(name = "loan_transaction_id")
     private LoanTransaction loanTransaction;
 

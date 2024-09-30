@@ -4,12 +4,14 @@ import com.enigmacamp.loanapp.base.BaseEntity;
 import com.enigmacamp.loanapp.constant.enums.EApprovalStatus;
 import com.enigmacamp.loanapp.constant.strings.PathDB;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.swing.text.View;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class LoanTransaction extends BaseEntity {
     private EApprovalStatus approvalStatus;
 
     @OneToMany(mappedBy = "loanTransaction")
+    @JsonView
     @JsonManagedReference
     private List<LoanTransactionDetail> loanTransactionDetails;
 }

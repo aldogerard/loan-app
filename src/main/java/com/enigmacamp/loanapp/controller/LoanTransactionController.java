@@ -45,7 +45,6 @@ public class LoanTransactionController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_STAFF')")
     public ResponseEntity<?> approveLoanTransaction(@PathVariable String id, @RequestBody ApproveTransactionRequest approveTransactionRequest) {
         approveTransactionRequest.setAdminId(id);
-        System.out.println(approveTransactionRequest);
         LoanTransactionResponse loanTransactionResponse = loanTransactionService.approveLoanTransaction(approveTransactionRequest);
         BaseResponse<?> baseResponse = mapToBaseResponse(Message.SUCCESS_GET, HttpStatus.OK.value(), loanTransactionResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(baseResponse);
